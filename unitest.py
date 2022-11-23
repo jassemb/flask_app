@@ -11,10 +11,17 @@ class AppTestCase(unittest.TestCase):
     def tearDown(self):
         self.ctx.pop()
 
+
+    def test_landing_aliases(self):
+        landing = self.client.post('/')
+        assert landing.status_code == 405
+
     def test_home(self):
-        response = self.client.post("/", data={"content": "Stock News Sentiment Analyzer"})
-        assert response.status_code == 200
-        assert "POST method called" == response.get_data(as_text=True)
+        landing = self.client.get("/")
+        html = landing.data.decode()
+        assert "<h1 style=\"padding:10px\">Stock News Sentiment Analyzer</h1>" in html
+        landing.status_code == 200
+
 
 if __name__ == "__main__":
     unittest.main()
